@@ -1,0 +1,92 @@
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f6fa;
+}
+
+.App {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 700px;
+  padding: 20px 30px;
+  margin: 0 auto;
+  border-radius: 6px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+          box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: auto;
+  background-color: #273c75;
+  color: #f5f6fa;
+}
+.App .length-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+.App .length {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.App .length .label {
+  font-size: 1.3em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.App .length .label::first-letter {
+  text-transform: uppercase;
+}
+.App .length .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #192a56;
+  border-radius: 5px;
+  width: 150px;
+  height: 70px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+          box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.App .length .container ion-icon {
+  cursor: pointer;
+  line-height: 2em;
+  font-size: 30px;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.App .length .container ion-icon:hover {
+  font-size: 2.2em;
+}
+.App .length .container .increment {
+  color: #4cd137;
+}
+.App .length .container .decrement {
+  color: #e84118;
+}
+.App .length .container p {
+  margin: 0 15px;
+  font-size: 1.5em;
+}/*# sourceMappingURL=App.css.map */

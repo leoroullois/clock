@@ -1,0 +1,68 @@
+@import "./exports/variables";
+* {
+	box-sizing: border-box;
+}
+body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: $light-white;
+}
+.App {
+	display: flex;
+	flex-direction: column;
+    width: 700px;
+    padding: 20px 30px;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	height: auto;
+	background-color: $main-blue;
+	color: $light-white;
+	.length-container {
+		display: flex;
+		justify-content: space-around;
+	}
+	.length {
+		display: flex;
+		flex-direction: column;
+		.label {
+			font-size: 1.3em;
+			margin-bottom: 10px;
+			text-align: center;
+		}
+		.label::first-letter {
+			text-transform: uppercase;
+		}
+		.container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: $dark-blue;
+			border-radius: 5px;
+			width: 150px;
+			height: 70px;
+			box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+			ion-icon {
+				cursor: pointer;
+				line-height: 2em;
+				font-size: 30px;
+				transition: all 0.2s;
+				&:hover {
+					font-size: 2.2em;
+				}
+			}
+			.increment {
+				color: $green;
+			}
+			.decrement {
+				color: $red;
+			}
+			p {
+				margin: 0 15px;
+				font-size: 1.5em;
+			}
+		}
+	}
+}
