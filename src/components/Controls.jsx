@@ -8,102 +8,85 @@ const style = {
 	fontSize: "3rem",
 	cursor: "pointer",
 };
-
+let timer;
 class Presentational extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handlePlay = this.handlePlay.bind(this);
 		this.handlePause = this.handlePause.bind(this);
 		this.handleReset = this.handleReset.bind(this);
-		this.myTimer = this.myTimer.bind(this);
+		this.tick = this.tick.bind(this);
+		this.setTimer = this.setTimer.bind(this);
+		// this.myTimer = this.myTimer.bind(this);
 	}
-	myTimer(inBreak) {
-		this.props.session.timers.push(
-			setInterval((x = inBreak) => {
-				if (x) {
-					// ? Si le timer est écoulé
-					if (this.props.session.breakSeconds === 0 && this.props.session.breakMinutes===0) {
-						this.props.session.inBreak=false;
-						this.props.session.breakMinutes=this.props.length.breakDuration;
-						this.props.session.sessionSeconds=0;
-						this.props.session.breakSeconds=0;
-					} else {
-						// ? Si les secondes = 0 alors minutes--;
-						if (this.props.session.breakSeconds === 0) {
-							this.props.session.breakMinutes--;
-						}
-						// ? Décrémente les secondes correctement
-						this.props.session.breakSeconds =
-							this.props.session.breakSeconds === 0
-								? 59
-								: this.props.session.breakSeconds - 1;
-					}
-				} else {
-					// ? Si le timer est écoulé
-					if (this.props.session.sessionSeconds===0 && this.props.session.sessionMinutes===0) {
-						this.props.session.inBreak=true;
-						this.props.session.sessionMinutes=this.props.length.sessionDuration;
-						this.props.session.sessionSeconds=0;
-						this.props.session.breakSeconds=0;
-					} else {
-						// ? Si les secondes = 0 alors minutes--;
-						if (this.props.session.sessionSeconds === 0) {
-							this.props.session.sessionMinutes--;
-						}
-						// ? Décrémente les secondes correctement
-						this.props.session.sessionSeconds =
-							this.props.session.sessionSeconds === 0
-								? 59
-								: this.props.session.sessionSeconds - 1;
-					}
-				}
-				this.props.playClock();
-			}, 1000)
-		);
+	tick() {
+		if (this.props.session.seconds === 0) {
+			const inBreak =this.props.length.inBreak;
+			document.querySelector("#beep").play();
+			if (inBreak) {
+				this.stopTimer();
+				this.props.session.seconds = this.props.length.sessionDuration;
+				this.props.length.inBreak= !inBreak;
+				this.setTimer();
+			} else {
+				this.stopTimer();
+				this.props.session.seconds = this.props.length.breakDuration;
+				this.props.length.inBreak= !inBreak;
+				this.setTimer();
+			}
+		} else {
+			this.props.session.seconds -= 1;
+		}
+		this.props.playClock();
 	}
+
+	setTimer() {
+		timer = setInterval(this.tick, 1000);
+	}
+	stopTimer() {
+		clearInterval(timer);
+	}
+
 	handlePlay() {
-		console.log("controls props :", this.props);
+		console.log("PLAY :", this.props);
+		console.table(this.props);
 		// ? Indique que le timer est en route
 		this.props.session.running = true;
 
 		// ? Démarre le timer
-		this.myTimer(this.props.session.inBreak);
+		this.setTimer();
 		this.props.playClock();
 	}
 	handlePause() {
-		console.log("controls props :", this.props);
+		console.log("PAUSE :", this.props);
+		console.table(this.props);
 		// ? Indique que le timer s'arrête
 		this.props.session.running = false;
 
 		// ? Arrête le timer
-		const myArr = this.props.session.timers;
-		for (let k = 0; k < myArr.length; k++) {
-			clearInterval(this.props.session.timers[k]);
-		}
+		this.stopTimer();
 		this.props.pauseClock();
 	}
 	handleReset() {
-		console.log("controls props :");
+		console.log("RESET :", this.props);
 		console.table(this.props);
 
+		// ? Gère l'audio
+		const audioBip = document.querySelector("#beep");
+		audioBip.pause();
+		audioBip.currentTime=0;
+		
 		// ? Indique que le timer est arrêté
 		this.props.session.running = false;
 
 		// ? Remets les valeurs par défaut
-		this.props.length.sessionDuration = 25;
-		this.props.length.breakDuration = 5;
-		this.props.session.sessionMinutes = 25;
-		this.props.session.sessionSeconds = 0;
-		this.props.session.breakMinutes = 25;
-		this.props.session.breakSeconds = 5;
+		this.props.length.sessionDuration = 25 * 60;
+		this.props.length.breakDuration = 5 * 60;
+		this.props.session.seconds = 25 * 60;
 
 		// ? Arrête le timer
-		const myArr = this.props.session.timers;
-		for (let k = 0; k < myArr.length; k++) {
-			clearInterval(this.props.session.timers[k]);
-		}
+		this.stopTimer();
 		this.props.resetClock();
-		console.table(this.props);
 	}
 	render() {
 		const start = (
@@ -134,7 +117,6 @@ const mapStateToProps = (state) => {
 		length: state.length,
 		session: state.session,
 		controls: state.controls,
-		// length:state.length,
 	};
 };
 const mapDispatchToPops = (dispatch) => {

@@ -14,32 +14,34 @@ const style = {
 };
 
 class Presentational extends React.Component {
+	componentDidMount() {
+		if (this.props.controls.playing === true) {
+			this.props.session.running = true;
+		} else {
+			this.props.session.running = false;
+		}
+	}
 	render() {
+		const seconds = this.props.session.seconds;
 		return (
 			<div style={style} className='timer'>
 				<p
 					style={{ fontSize: "1.5em", margin: 0, lineHeight: "2em" }}
 					id='timer-label'
 				>
-					Session
+					{this.props.length.inBreak ? "Break" : "Session"}
 				</p>
 				<div style={{ fontSize: "2.5em", fontWeight: "bold" }} id='time-left'>
-					{this.props.session.inBreak
-						? this.props.session.breakMinutes < 10
-							? "0" + this.props.session.breakMinutes
-							: this.props.session.breakMinutes
-						: this.props.session.sessionMinutes < 10
-						? "0" + this.props.session.sessionMinutes
-						: this.props.session.sessionMinutes}
-					:
-					{this.props.session.inBreak
-						? this.props.session.breakSeconds < 10
-							? "0" + this.props.session.breakSeconds
-							: this.props.session.breakSeconds
-						: this.props.session.sessionSeconds < 10
-						? "0" + this.props.session.sessionSeconds
-						: this.props.session.sessionSeconds}
+					{Math.floor(seconds / 60) < 10
+						? "0" + Math.floor(seconds / 60)
+						: Math.floor(seconds / 60)}
+					:{seconds % 60 < 10 ? "0" + (seconds % 60) : seconds % 60}
 				</div>
+				<audio
+					preload='auto'
+					id='beep'
+					src='https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav'
+				></audio>
 			</div>
 		);
 	}

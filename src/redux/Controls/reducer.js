@@ -2,7 +2,6 @@ import { PAUSE, PLAY, RESET } from "./type";
 
 const initialState = {
 	playing: false,
-	updateSession:null,
 };
 export const controlsReducer = (state = initialState, action) => {
 	switch (action.type) {

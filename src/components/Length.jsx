@@ -13,20 +13,31 @@ class Presentational extends React.Component {
 
 	handleIncrement() {
 		console.log("length props :", this.props);
-		console.log("name :", this.props.name);
-		this.props.incrementLength(this.props.name, this.props.session);
-		// this.props.session.sessionMinutes=(this.props.name==="break" ? this.props.length.breakDuration+1 : this.props.length.sessionDuration+1);
-		if (this.props.name === "session") {
-			this.props.session.sessionMinutes = this.props.length.sessionDuration + 1;
+		console.table(this.props);
+		// ? Si on est en pause
+		if (!this.props.session.running) {
+			// ? Si on incrémente la durée de la session
+			if (
+				this.props.name === "session" &&
+				this.props.length.sessionDuration !== 60 * 60
+			) {
+				this.props.session.seconds = this.props.length.sessionDuration + 60;
+			}
 		}
+		this.props.incrementLength(this.props.name);
 	}
 	handleDecrement() {
 		console.log("length props :", this.props);
-		console.log("name :", this.props.name);
-		this.props.decrementLength(this.props.name, this.props.session);
-		if (this.props.name === "session") {
-			this.props.session.sessionMinutes = this.props.length.sessionDuration - 1;
+		console.table(this.props);
+		if (!this.props.session.running) {
+			if (
+				this.props.name === "session" &&
+				this.props.length.sessionDuration !== 60
+			) {
+				this.props.session.seconds = this.props.length.sessionDuration - 60;
+			}
 		}
+		this.props.decrementLength(this.props.name);
 	}
 	render() {
 		return (
@@ -44,8 +55,8 @@ class Presentational extends React.Component {
 
 					<p id={this.props.name + "-length"}>
 						{this.props.name === "break"
-							? this.props.length.breakDuration
-							: this.props.length.sessionDuration}
+							? this.props.length.breakDuration / 60
+							: this.props.length.sessionDuration / 60}
 					</p>
 
 					<ion-icon
@@ -61,7 +72,6 @@ class Presentational extends React.Component {
 }
 const mapStateToPprops = (state) => {
 	return {
-		// controls:state.controls,
 		length: state.length,
 		session: state.session,
 		controls: state.controls,
@@ -69,11 +79,11 @@ const mapStateToPprops = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
 	return {
-		incrementLength: (name, session) => {
-			dispatch(incrementAction(name, session));
+		incrementLength: (name) => {
+			dispatch(incrementAction(name));
 		},
-		decrementLength: (name, session) => {
-			dispatch(decrementAction(name, session));
+		decrementLength: (name) => {
+			dispatch(decrementAction(name));
 		},
 		timerLength: () => {
 			dispatch(sessionAction());
